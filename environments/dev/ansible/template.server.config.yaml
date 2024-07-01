@@ -1,0 +1,4 @@
+# SERVER config.yaml
+
+node-name: k3s-server
+write-kubeconfig-mode: 0644

@@ -1,0 +1,5 @@
+# AGENT config.yaml
+
+node-name: k3s-agent
+server: https://${k3s-server-private-ip}:6443
+token: ${k3s-token}
