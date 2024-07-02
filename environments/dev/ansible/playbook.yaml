@@ -1,3 +1,10 @@
+---
+- name: Test communication with K3s nodes
+  hosts: k3s
+  tasks:
+    - name: Ping all EC2
+      ansible.builtin.ping:
+
 - name: Install K3s on Server
   hosts: k3s-server
   become: true
@@ -11,7 +18,7 @@
         mode: 0644
 
     - name: Install K3s on Server
-      ansible.builtin.shell:  curl -sfL https://get.k3s.io | sh -s -
+      ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -s -
 
 - name: Install K3s on Agent
   hosts: k3s-agent
