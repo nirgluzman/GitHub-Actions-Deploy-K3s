@@ -13,6 +13,14 @@ resource "aws_security_group" "tf-k3s-sec-gr" {
     self      = true # security group itself will be added as a source to this ingress rule.
   }
 
+  ingress {
+    description = "allow ICMP Echo request (ping)"
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   dynamic "ingress" {
     for_each      = var.allowed_ports
     iterator      = port
