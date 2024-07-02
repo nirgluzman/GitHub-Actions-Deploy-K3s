@@ -17,7 +17,7 @@
         group: root
         mode: 0644
 
-    - name: Install K3s on Server
+    - name: Install K3s
       ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -s -
 
 - name: Install K3s on Agent
@@ -32,5 +32,5 @@
         group: root
         mode: 0644
 
-    - name: Install K3s on Agent
+    - name: Install K3s
       ansible.builtin.shell: curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=agent sh -s -
