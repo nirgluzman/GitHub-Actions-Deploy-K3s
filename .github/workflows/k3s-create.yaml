@@ -67,6 +67,7 @@ jobs:
 
   install-k3s-ansible:
     name: Install K3s with Ansible
+    needs: create-cluster-terraform # Define dependencies between jobs within a workflow
     runs-on: ubuntu-latest
 
     # Set the default shell and working-directory to all run steps in the job
