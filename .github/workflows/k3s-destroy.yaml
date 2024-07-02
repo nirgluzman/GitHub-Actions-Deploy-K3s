@@ -12,8 +12,8 @@ permissions:
   contents: read
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  destroy-cluster-terraform:
+    name: Destroy cluster with Terrafrom
     runs-on: ubuntu-latest
 
     # Set the default shell and working-directory to all run steps in the job
