@@ -1,4 +1,4 @@
-name: Create K3s dev cluster with Terraform
+name: Create dev cluster with Terraform and install K3s with Ansible
 
 on:
   workflow_dispatch:
@@ -14,8 +14,8 @@ permissions:
   contents: read
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  create-cluster-terraform:
+    name: Create cluster with Terrafrom
     runs-on: ubuntu-latest
 
     # Set the default shell and working-directory to all run steps in the job
@@ -53,4 +53,61 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: k3s-key.pem
-          path: environments/dev/ansible/k3s-key.pem
+          path: ./environments/dev/ansible/k3s-key.pem
+
+      - name: Upload artifacts for Ansible
+        uses: actions/upload-artifact@v4
+        with:
+          name: ansible-artifacts
+          path: |
+            ./environments/dev/ansible/k3s-key.pem
+            ./environments/dev/ansible/inventory.ini
+            ./environments/dev/ansible/server.config.yaml
+            ./environments/dev/ansible/agent.config.yaml
+
+  install-k3s-ansible:
+    name: Install K3s with Ansible
+    runs-on: ubuntu-latest
+
+    # Set the default shell and working-directory to all run steps in the job
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./environments/dev/ansible
+
+    steps:
+      # Configure AWS credentials and region environment variables
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE}}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Wait for EC2 creation and validate instance status check
+      - name: Wait for Infrastructure Creation by Terraform
+        run: |
+          INSTANCE_IDS=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=nioyatech-k3s*" "Name=instance-state-name,Values=running" \
+            --query 'Reservations[*].Instances[*].InstanceId' \
+            --region us-east-1 --output text | sed 's/\t/,/g')
+          echo "List of running instances with 'nioyatech-k3s*' tag (if any):"
+          echo "$INSTANCE_IDS"
+          aws ec2 wait instance-status-ok --instance-ids $INSTANCE_IDS --region us-east-1
+
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Downdload artifacts for Ansible created in previous job
+      - name: Downdload artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ansible-artifacts # Name of the artifact to download
+          path: ./environments/dev/ansible/ # Destination path
+
+      # Install K3s with Ansible
+      - name: Install K3s with Ansible
+        run: |
+          ls -al
+          ansible --version
+          ansible-playbook ./playbook.yaml
