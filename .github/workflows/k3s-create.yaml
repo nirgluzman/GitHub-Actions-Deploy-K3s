@@ -1,7 +1,11 @@
 name: Create dev cluster with Terraform and install K3s with Ansible
 
+# Controls when the workflow will run
 on:
+  # Enable a workflow to be triggered manually.
   workflow_dispatch:
+
+  # # Trigger the workflow on push or pull request events but only for the "main" branch.
   # push:
   #   branches: ['main']
 
@@ -113,4 +117,4 @@ jobs:
           ls -al
           ansible --version
           ansible-config list
-          ansible-playbook ./playbook.yaml
+          ansible-playbook -vvv ./playbook.yaml
