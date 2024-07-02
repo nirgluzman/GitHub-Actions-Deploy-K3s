@@ -83,6 +83,10 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE}}
           aws-region: ${{ env.AWS_REGION }}
 
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
       # Wait for EC2 creation and validate instance status check
       - name: Wait for Infrastructure Creation by Terraform
         run: |
@@ -93,10 +97,6 @@ jobs:
           echo "List of running instances with 'nioyatech-k3s*' tag (if any):"
           echo "$INSTANCE_IDS"
           aws ec2 wait instance-status-ok --instance-ids $INSTANCE_IDS --region us-east-1
-
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout source code
-        uses: actions/checkout@v4
 
       # Downdload artifacts for Ansible created in previous job
       - name: Downdload artifacts
