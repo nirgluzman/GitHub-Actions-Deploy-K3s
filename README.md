@@ -50,6 +50,7 @@
 ```yaml
 node-name: 'k3s-server'
 write-kubeconfig-mode: '0644'
+token: ${k3s_token}
 ```
 
 ```bash
