@@ -42,10 +42,6 @@ jobs:
       - name: Terraform Init
         run: terraform init -backend-config=backend.conf
 
-      # Checks that all Terraform configuration files adhere to a canonical format
-      - name: Terraform Format
-        run: terraform fmt -check
-
       # On push to "main", build or change infrastructure according to Terraform configuration files
       - name: Terraform Apply
         run: terraform destroy -auto-approve -input=false
