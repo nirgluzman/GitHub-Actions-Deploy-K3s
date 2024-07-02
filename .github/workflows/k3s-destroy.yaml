@@ -16,10 +16,11 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
 
-    # Use the Bash shell regardless whether the GitHub Actions runner
+    # Set the default shell and working-directory to all run steps in the job
     defaults:
       run:
         shell: bash
+        working-directory: ./environments/dev
 
     steps:
       # Configure AWS credentials and region environment variables
@@ -39,7 +40,7 @@ jobs:
 
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
-        run: cd environments/dev && terraform init -backend-config=backend.conf
+        run: terraform init -backend-config=backend.conf
 
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
