@@ -56,7 +56,7 @@ resource "aws_instance" "server" {
   instance_type           = "${var.ec2_type}"
   key_name                = "${var.ec2_keyname}"
   iam_instance_profile    = aws_iam_instance_profile.k3s.name
-  user_data               = file("${path.module}/scripts/server.sh")
+  user_data               = base64encode(file("${path.module}/scripts/server.sh"))
   vpc_security_group_ids  = [aws_security_group.tf-k3s-sec-gr.id]
   tags = {
     Name = "${local.name}-k3s-server"
@@ -69,7 +69,7 @@ resource "aws_instance" "agent" {
   instance_type           = "${var.ec2_type}"
   key_name                = "${var.ec2_keyname}"
   iam_instance_profile    = aws_iam_instance_profile.k3s.name
-  user_data               = file("${path.module}/scripts/agent.sh")
+  user_data               = base64encode(file("${path.module}/scripts/agent.sh"))
   vpc_security_group_ids  = [aws_security_group.tf-k3s-sec-gr.id]
   tags = {
     Name = "${local.name}-k3s-agent"
