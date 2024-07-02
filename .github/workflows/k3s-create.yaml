@@ -107,8 +107,10 @@ jobs:
           path: ./environments/dev/ansible/ # Destination path
 
       # Install K3s with Ansible
-      - name: Install K3s with Ansible
+      - name: Run Ansible Playbook
         run: |
+          chmod 700 k3s-key.pem
           ls -al
           ansible --version
+          ansible-config list
           ansible-playbook ./playbook.yaml
