@@ -116,5 +116,4 @@ jobs:
           chmod 700 k3s-key.pem
           ls -al
           ansible --version
-          ansible-config list
-          ansible-playbook -vvv ./playbook.yaml
+          ansible-playbook ./playbook.yaml
