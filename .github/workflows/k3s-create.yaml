@@ -2,8 +2,8 @@ name: Create K3s dev cluster with Terraform
 
 on:
   workflow_dispatch:
-  push:
-    branches: ['main']
+  # push:
+  #   branches: ['main']
 
 env:
   AWS_REGION: us-east-1
@@ -46,11 +46,11 @@ jobs:
 
       # Build or apply changes to infrastructure according to Terraform configuration files
       - name: Terraform Apply
-        run: pwd && terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false
 
       # Export workflow artifacts
       - name: Export SSH private key artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ssh-private-key
+          name: k3s-key.pem
           path: environments/dev/ansible/k3s-key.pem

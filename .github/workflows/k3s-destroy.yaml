@@ -1,4 +1,4 @@
-name: Destroy K3s dev cluster created by Terraform, manually triggered
+name: Destroy K3s dev cluster created with Terraform, manually triggered
 
 on:
   workflow_dispatch:
@@ -42,6 +42,6 @@ jobs:
       - name: Terraform Init
         run: terraform init -backend-config=backend.conf
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      - name: Terraform Apply
+      # Destroy infrastructure
+      - name: Terraform Destroy
         run: terraform destroy -auto-approve -input=false
