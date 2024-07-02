@@ -89,7 +89,7 @@ resource "local_file" "ansible-inventory" {
 
 resource "random_password" "k3s-token" {
   length  = 30
-  special = true
+  special = false # whether to include special characters in the result
 }
 
 resource "aws_ssm_parameter" "k3s-token" {
