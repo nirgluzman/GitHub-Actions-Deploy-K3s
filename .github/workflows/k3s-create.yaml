@@ -115,5 +115,5 @@ jobs:
         run: |
           chmod 600 k3s-key.pem
           ansible --version
-          ansible-config list--format 'yaml'
+          ansible-config list --format 'yaml'
           ansible-playbook ./pb-k3s-setup.yaml
