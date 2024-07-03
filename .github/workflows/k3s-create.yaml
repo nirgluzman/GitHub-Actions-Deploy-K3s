@@ -113,7 +113,7 @@ jobs:
       # Install K3s with Ansible
       - name: Run Ansible Playbook
         run: |
-          chmod 700 k3s-key.pem
-          ls -al
+          chmod 600 k3s-key.pem
           ansible --version
-          ansible-playbook ./playbook.yaml
+          ansible-config list--format 'yaml'
+          ansible-playbook ./pb-k3s-setup.yaml
