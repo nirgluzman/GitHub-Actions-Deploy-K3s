@@ -1,12 +1,13 @@
 ---
 - name: Test communication with K3s nodes
-  hosts: k3s
+  hosts: k3s-cluster
   tasks:
     - name: Ping all EC2
       ansible.builtin.ping:
 
 - name: Install K3s on Server
   hosts: k3s-server
+  gather_facts: yes # Ensure facts are gathered
   become: true
   tasks:
     - name: Copy K3s config file
@@ -20,10 +21,16 @@
     - name: Install K3s
       ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -s -
 
-    - name: Fetch kubeconfig file
+    # Create a kubeconfig file for remote access to cluster - update the value of the `server` field with the public IP of the K3s server
+    - name: Create a kubeconfig file for remote access to cluster
+      ansible.builtin.shell: |
+        cp /etc/rancher/k3s/k3s.yaml /etc/rancher/k3s/k3s-kubeconfig.yaml
+        sed -i 's/127.0.0.1/{{ ansible_facts.default_ipv4.address }}/' /etc/rancher/k3s/k3s-kubeconfig.yaml
+
+    - name: Fetch kubeconfig file from K3s server to control node (GitHub runner)
       ansible.builtin.fetch:
-        src: /etc/rancher/k3s/k3s.yaml
-        dest: k3s.yaml
+        src: /etc/rancher/k3s/k3s-kubeconfig.yaml
+        dest: k3s-kubeconfig.yaml
         flat: true
 
 - name: Install K3s on Agent
