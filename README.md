@@ -121,8 +121,14 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=agent sh -s -
 
 - The kubeconfig file stored at `/etc/rancher/k3s/k3s.yaml` is used to configure access to the
   Kubernetes cluster.
+
 - Note that after running the K3s installation, a kubeconfig file will be written to
   `/etc/rancher/k3s/k3s.yaml` and the kubectl installed by K3s will automatically use it.
+
+- In order to access the cluster from outside with `kubectl`, we need to configure the `tls-san`
+  flag, which is additional hostnames or IPv4/IPv6 addresses as Subject Alternative Names (SAN) on
+  the TLS certificate.
+  <https://taozhi.medium.com/k3s-apiserver-unable-to-connect-to-the-server-x509-certificate-is-valid-for-10-43-0-1-8ec1f8c2097f>
 
 ## K3s systemd service
 
