@@ -104,6 +104,7 @@ resource "local_file" "k3-server-config-file" {
    file_permission = "0640"
    content         = templatefile("${path.module}/ansible/template.server.config.yaml",
     {
+      k3s-server-public-ip = aws_instance.server.public_ip,
       k3s-token = random_password.k3s-token.result
     }
    )

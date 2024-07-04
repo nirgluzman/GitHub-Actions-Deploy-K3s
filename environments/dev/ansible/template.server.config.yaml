@@ -3,3 +3,5 @@
 node-name: k3s-server
 write-kubeconfig-mode: '0644'
 token: ${k3s-token}
+tls-san:
+  - ${k3s-server-public-ip}
