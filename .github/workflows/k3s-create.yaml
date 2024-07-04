@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   create-cluster-terraform:
-    name: Create cluster with Terrafrom
+    name: Create cluster with Terraform
     runs-on: ubuntu-latest
 
     # Set the default shell and working-directory to all run steps in the job
