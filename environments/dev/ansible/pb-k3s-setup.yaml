@@ -20,6 +20,12 @@
     - name: Install K3s
       ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -s -
 
+    - name: Fetch kubeconfig file
+      ansible.builtin.fetch:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: k3s.yaml
+        flat: true
+
 - name: Install K3s on Agent
   hosts: k3s-agent
   become: true

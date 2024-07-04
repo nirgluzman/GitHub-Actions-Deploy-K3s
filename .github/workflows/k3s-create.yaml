@@ -117,3 +117,10 @@ jobs:
           ansible --version
           ansible-config list --format 'yaml'
           ansible-playbook ./pb-k3s-setup.yaml
+
+      # Upload kubeconfig file to enable access to K3s cluster from outside
+      - name: Export kubeconfig file for K3s cluster access
+        uses: actions/upload-artifact@v4
+        with:
+          name: k3s.yaml
+          path: ./environments/dev/ansible/k3s.yaml
