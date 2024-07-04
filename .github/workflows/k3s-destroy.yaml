@@ -1,6 +1,8 @@
-name: Destroy K3s dev cluster created with Terraform, manually triggered
+name: Destroy K3s dev cluster created with Terraform
 
+# Controls when the workflow will run
 on:
+  # Enable a workflow to be triggered manually
   workflow_dispatch:
 
 env:
