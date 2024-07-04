@@ -115,6 +115,15 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=agent sh -s -
 /usr/local/bin/k3s-agent-uninstall.sh
 ```
 
+## Cluster Access
+
+<https://docs.k3s.io/cluster-access>
+
+- The kubeconfig file stored at `/etc/rancher/k3s/k3s.yaml` is used to configure access to the
+  Kubernetes cluster.
+- Note that after running the K3s installation, a kubeconfig file will be written to
+  `/etc/rancher/k3s/k3s.yaml` and the kubectl installed by K3s will automatically use it.
+
 ## K3s systemd service
 
 - `/etc/systemd/system/k3s.service` -> server
@@ -160,3 +169,16 @@ spec:
   externalIPs:
     - <YOUR_IP>
 ```
+
+## Helm
+
+<https://docs.k3s.io/helm>
+
+- Helm is the package management tool of choice for Kubernetes.
+
+- K3s includes a Helm Controller that manages installing, upgrading/reconfiguring, and uninstalling
+  Helm charts using a HelmChart Custom Resource Definition (CRD).
+
+- We just need to put the Kubernetes manifests files (YAML) in
+  `/var/lib/rancher/k3s/server/manifests` folder, and they will automatically be deployed.
+  <https://docs.rke2.io/helm#using-the-helm-crd>
