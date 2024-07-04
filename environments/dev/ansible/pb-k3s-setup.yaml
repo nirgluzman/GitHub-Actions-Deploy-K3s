@@ -22,10 +22,11 @@
       ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -s -
 
     # Create a kubeconfig file for remote access to cluster - update the value of the `server` field with the public IP of the K3s server
+    # `ansible_host` is a special variable that holds the IP address of the target host, https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html
     - name: Create a kubeconfig file for remote access to cluster
       ansible.builtin.shell: |
         cp /etc/rancher/k3s/k3s.yaml /etc/rancher/k3s/k3s-kubeconfig.yaml
-        sed -i 's/127.0.0.1/{{ ansible_facts.default_ipv4.address }}/' /etc/rancher/k3s/k3s-kubeconfig.yaml
+        sed -i 's/127.0.0.1/{{ ansible_host }}/' /etc/rancher/k3s/k3s-kubeconfig.yaml
 
     - name: Fetch kubeconfig file from K3s server to control node (GitHub runner)
       ansible.builtin.fetch:
