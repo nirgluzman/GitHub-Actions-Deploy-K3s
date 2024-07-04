@@ -122,5 +122,5 @@ jobs:
       - name: Export kubeconfig file for K3s cluster access
         uses: actions/upload-artifact@v4
         with:
-          name: k3s.yaml
-          path: ./environments/dev/ansible/k3s.yaml
+          name: k3s-kubeconfig.yaml
+          path: ./environments/dev/ansible/k3s-kubeconfig.yaml
