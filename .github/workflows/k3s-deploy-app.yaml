@@ -68,6 +68,6 @@ jobs:
           IMAGE_NAME: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
         run: |
           export KUBECONFIG=./k3s-kubeconfig.yaml
-          sed -i 's/IMAGE_NAME/$IMAGE_NAME/' ./web-app/values.yaml
+          sed -i 's/IMAGE_NAME/${{ env.IMAGE_NAME }}/' ./web-app/values.yaml
           cat ./web-app/values.yaml
           helm upgrade --install web-app-release web-app
