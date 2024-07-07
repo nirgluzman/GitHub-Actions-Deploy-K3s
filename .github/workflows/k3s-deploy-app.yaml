@@ -67,7 +67,7 @@ jobs:
         run: |
           export KUBECONFIG=./k3s-kubeconfig.yaml
           sed -i 's#IMAGE_NAME#${{ env.IMAGE_NAME }}#' ./web-app/values.yaml
-          kubectl create secret docker-registry regcred \
+          kubectl describe secret regcred || kubectl create secret docker-registry regcred \
             --docker-server=${{ env.ECR_REGISTRY }} \
             --docker-username=AWS \
             --docker-password=$(aws ecr get-login-password)
