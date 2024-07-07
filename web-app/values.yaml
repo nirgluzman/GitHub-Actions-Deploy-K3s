@@ -6,7 +6,7 @@ webserver:
   name: webserver
 
   image:
-    name: 'nirgluzman/web'
+    name: IMAGE_NAME
     tag: 'latest'
     exposedPort: 3000
     pullPolicy: 'Always'
