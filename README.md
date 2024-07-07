@@ -188,3 +188,70 @@ spec:
 - We just need to put the Kubernetes manifests files (YAML) in
   `/var/lib/rancher/k3s/server/manifests` folder, and they will automatically be deployed.
   <https://docs.rke2.io/helm#using-the-helm-crd>
+
+## Helm commands
+
+- By default, Helm attempts to find this file in the place where kubectl creates it
+  (`$HOME/.kube/config`).
+
+- If we need to use a different config file then we have to change $KUBECONFIG value so that helm
+  gets info about your cluster from the correct config file.
+
+```bash
+export KUBECONFIG=/path_to_kubeconfig_file
+```
+
+- To install a new package, use the `helm install command`. The install argument must be a chart
+  reference, a path to a packaged chart, a path to an unpacked chart directory or a URL.
+
+```bash
+helm install [release-name] [chart] [flags]
+```
+
+Some useful flags are:
+
+`--dry-run` Performs a simulation of the installation process for testing purposes.
+`--generate-name` Generates a release name.
+
+- `helm list` to list all of the releases for a specified namespace (uses current namespace context
+  if namespace not specified).
+
+## Using Amazon S3 as a Helm Chart Repository
+
+- <https://helm-s3.hypnoglow.io/>
+- <https://github.com/hypnoglow/helm-s3>
+- <https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/set-up-a-helm-v3-chart-repository-in-amazon-s3.html>
+
+1; To create a new repository - generates an empty index.yaml and uploads it to the S3 bucket under
+`/charts` key
+
+```bash
+AWS_REGION=us-east-1 helm s3 init s3://bucket-name/charts
+```
+
+2; To work with this repo by its name, first you need to add it using native helm command:
+
+```bash
+helm repo add s3-repo s3://bucket-name/charts
+helm repo update
+helm repo list
+```
+
+3; Package a chart directory into a versioned chart archive file (.tgz)
+
+```bash
+helm package <chart-path>
+```
+
+4; Store the local package in the Amazon S3 Helm repository.
+
+```bash
+helm s3 push <chart-name>.tgz s3-repo
+helm search repo s3-repo --versions
+```
+
+5; Install the latest release from the repo
+
+```bash
+helm upgrade --install web-app-release s3-repo/web-app-cluster
+```
