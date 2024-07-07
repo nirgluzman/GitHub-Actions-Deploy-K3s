@@ -9,9 +9,9 @@ on:
         type: string
         required: true
 
-  workflow_run:
-    workflows: ['Create dev cluster with Terraform and install K3s with Ansible']
-    types: [completed]
+  # workflow_run:
+  #   workflows: ['Create dev cluster with Terraform and install K3s with Ansible']
+  #   types: [completed]
 
 env:
   AWS_REGION: us-east-1
@@ -58,7 +58,7 @@ jobs:
           # `github` context contains information about the workflow run and the event that triggered the run.
           github-token: ${{ github.token }} # GitHub automatically creates a unique GITHUB_TOKEN secret to use in our workflow, https://docs.github.com/en/actions/security-guides/automatic-token-authentication
           repository: ${{ github.repository }}
-          run-id: context.payload.workflow_run.id || ${{ inputs.k3s_create_workflow_run_id }}
+          run-id: ${{ inputs.k3s_create_workflow_run_id }} # extracts the run-id from previous workflow: context.payload.workflow_run.id
 
       - name: Install app to cluser with Helm
         env:
