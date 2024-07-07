@@ -49,7 +49,7 @@ jobs:
 
       # Downdload kubeconfig artificat from k3s-create workflow
       # https://github.com/actions/download-artifact?ta b=readme-ov-file#download-artifacts-from-other-workflow-runs-or-repositories
-      - name: Downdload kubeconfig from k3s-create workflow
+      - name: Download kubeconfig from k3s-create workflow
         uses: actions/download-artifact@v4
         with:
           name: k3s-kubeconfig.yaml # Name of the artifact to download
@@ -58,7 +58,7 @@ jobs:
           # `github` context contains information about the workflow run and the event that triggered the run.
           github-token: ${{ github.token }} # GitHub automatically creates a unique GITHUB_TOKEN secret to use in our workflow, https://docs.github.com/en/actions/security-guides/automatic-token-authentication
           repository: ${{ github.repository }}
-          run-id: ${{ inputs.k3s_create_workflow_run_id }} || context.payload.workflow_run.id
+          run-id: context.payload.workflow_run.id || ${{ inputs.k3s_create_workflow_run_id }}
 
       - name: Install app to cluser with Helm
         env:
