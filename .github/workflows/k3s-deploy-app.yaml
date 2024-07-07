@@ -65,7 +65,7 @@ jobs:
 
       - name: Install app to cluser with Helm
         env:
-          IMAGE_NAME: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+          IMAGE_NAME: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
         run: |
           export KUBECONFIG=./k3s-kubeconfig.yaml
           sed -i 's/IMAGE_NAME/$IMAGE_NAME/' ./web-app/values.yaml
