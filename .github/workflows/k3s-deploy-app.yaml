@@ -63,10 +63,10 @@ jobs:
       - name: Install app to cluser with Helm
         env:
           ECR_REGISTRY: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-          IMAGE_NAME: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
         run: |
+          export IMAGE_NAME=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
           export KUBECONFIG=./k3s-kubeconfig.yaml
-          sed -i 's#IMAGE_NAME#${{ env.IMAGE_NAME }}#' ./web-app/values.yaml
+          sed -i 's#IMAGE_NAME#$IMAGE_NAME#' ./web-app/values.yaml
           kubectl describe secret regcred || kubectl create secret docker-registry regcred \
             --docker-server=${{ env.ECR_REGISTRY }} \
             --docker-username=AWS \
