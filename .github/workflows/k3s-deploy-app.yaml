@@ -71,4 +71,5 @@ jobs:
             --docker-server=${{ env.ECR_REGISTRY }} \
             --docker-username=AWS \
             --docker-password=$(aws ecr get-login-password)
+          cat ./web-app/values.yaml
           helm upgrade --install web-app-release web-app
