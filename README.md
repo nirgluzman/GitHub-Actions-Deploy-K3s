@@ -176,6 +176,10 @@ spec:
     - <YOUR_IP>
 ```
 
+## GitHub Actions - share artifacts between workflows
+
+<https://stackoverflow.com/questions/78717210/how-to-share-artifacts-between-workflows-in-github-actions/78717761#78717761>
+
 ## Helm
 
 <https://docs.k3s.io/helm>
