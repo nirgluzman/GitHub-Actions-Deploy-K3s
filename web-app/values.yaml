@@ -7,9 +7,9 @@ webserver:
 
   image:
     name: IMAGE_NAME
-    tag: 'latest'
-    exposedPort: 3000
-    pullPolicy: 'Always'
+    tag: latest
+    exposedPort: 80
+    pullPolicy: Always
 
   replicaCount: 1
 
