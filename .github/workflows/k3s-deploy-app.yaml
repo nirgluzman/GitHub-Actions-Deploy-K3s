@@ -1,0 +1,64 @@
+name: Deploy app to K3s cluster with Helm
+
+# Controls when the workflow will run
+on:
+  # Enable a workflow to be triggered manually.
+  workflow_dispatch:
+    inputs:
+      k3s_create_workflow_run_id:
+        description: k3s-create workflow run-id
+        type: string
+        required: true
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: web-react
+
+# Enable OpenID Connect for AWS
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
+  actions: read # https://github.blog/2024-02-12-get-started-with-v4-of-github-actions-artifacts/#cross-run-or-repository-downloads
+
+jobs:
+  deploy-app-with-helm:
+    name: Deploy app from ECR to K3s with Helm
+    runs-on: ubuntu-latest
+
+    # Set the default shell and working-directory to all run steps in the job
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Configure AWS credentials and region environment variables
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE}}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR Private
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Print inputs
+        run: echo ${{ inputs.k3s_create_workflow_run_id }}
+
+      # # Downdload kubeconfig artificat from k3s-create workflow
+      # # https://github.com/actions/download-artifact?tab=readme-ov-file#download-artifacts-from-other-workflow-runs-or-repositories
+      # - name: Downdload kubeconfig from k3s-create workflow
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: k3s-kubeconfig.yaml # Name of the artifact to download
+      #     path: . # Destination path
+
+      #     # `github` context contains information about the workflow run and the event that triggered the run.
+      #     github-token: ${{ github.token }} # GitHub automatically creates a unique GITHUB_TOKEN secret to use in our workflow, https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+      #     repository: ${{ github.repository }}
+      #     run-id: ${{ inputs.k3s_create_workflow_run_id }}
