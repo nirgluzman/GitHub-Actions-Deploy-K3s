@@ -1,0 +1,18 @@
+# Default values for web-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+webserver:
+  name: webserver
+
+  image:
+    name: 'nirgluzman/web'
+    tag: 'latest'
+    exposedPort: 3000
+    pullPolicy: 'Always'
+
+  replicaCount: 1
+
+  service:
+    type: NodePort
+    nodePort: 30001

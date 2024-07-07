@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{ .Values.webserver.name }}-service
+
+spec:
+  selector:
+    server: {{ .Values.webserver.name }}
+
+  type: {{ .Values.webserver.service.type }}
+  ports:
+    - port: {{ .Values.webserver.image.exposedPort }} # for convenience, the `targetPort` and `port` have the same value.
+      targetPort: {{ .Values.webserver.image.exposedPort }} # for convenience, the `targetPort` and `port` have the same value.
+      nodePort: {{ .Values.webserver.service.nodePort }}
