@@ -51,6 +51,7 @@ resource "local_sensitive_file" "private_key" {
   content         = tls_private_key.rsa-2048.private_key_pem
 }
 
+# EC2 instance for K3s Server
 resource "aws_instance" "server" {
   ami                     = local.ami
   instance_type           = "${var.ec2_type}"
@@ -64,6 +65,7 @@ resource "aws_instance" "server" {
   }
 }
 
+# EC2 instance for K3s Agent
 resource "aws_instance" "agent" {
   ami                     = local.ami
   instance_type           = "${var.ec2_type}"
@@ -87,17 +89,19 @@ resource "local_file" "ansible-inventory" {
     })
 }
 
+# create a random password for the K3s token
 resource "random_password" "k3s-token" {
   length  = 30
   special = false # whether to include special characters in the result
 }
 
-resource "aws_ssm_parameter" "k3s-token" {
-  description = "k3s token to secure the node join process"
-  name        = "/${local.name}/K3S-TOKEN"
-  type        = "String"
-  value       = random_password.k3s-token.result
-}
+# # store the K3s token in the AWS SSM parameter store
+# resource "aws_ssm_parameter" "k3s-token" {
+#   description = "k3s token to secure the node join process"
+#   name        = "/${local.name}/K3S-TOKEN"
+#   type        = "String"
+#   value       = random_password.k3s-token.result
+# }
 
 resource "local_file" "k3-server-config-file" {
    filename        = "${path.module}/ansible/server.config.yaml"
