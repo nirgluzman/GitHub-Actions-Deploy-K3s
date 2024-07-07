@@ -2,6 +2,13 @@ name: Deploy app to K3s cluster with Helm
 
 # Controls when the workflow will run
 on:
+  workflow_dispatch:
+    inputs:
+      k3s_create_workflow_run_id:
+        description: k3s-create workflow run-id
+        type: string
+        required: true
+
   workflow_run:
     workflows: ['Create dev cluster with Terraform and install K3s with Ansible']
     types: [completed]
@@ -43,9 +50,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Print inputs
-        run: echo ${{ inputs.k3s_create_workflow_run_id }}
-
       # Downdload kubeconfig artificat from k3s-create workflow
       # https://github.com/actions/download-artifact?ta b=readme-ov-file#download-artifacts-from-other-workflow-runs-or-repositories
       - name: Downdload kubeconfig from k3s-create workflow
@@ -57,7 +61,7 @@ jobs:
           # `github` context contains information about the workflow run and the event that triggered the run.
           github-token: ${{ github.token }} # GitHub automatically creates a unique GITHUB_TOKEN secret to use in our workflow, https://docs.github.com/en/actions/security-guides/automatic-token-authentication
           repository: ${{ github.repository }}
-          run-id: context.payload.workflow_run.id
+          run-id: ${{ inputs.k3s_create_workflow_run_id }} || context.payload.workflow_run.id
 
       - name: Install app to cluser with Helm
         env:
