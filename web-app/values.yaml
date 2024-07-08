@@ -9,7 +9,7 @@ webserver:
     name: IMAGE_NAME
     tag: latest
     exposedPort: 80
-    pullPolicy: Always
+    pullPolicy: Always # when the container is restarted, explicitly forces Kubernetes to pull the image from container registry.
 
   replicaCount: 1
 
