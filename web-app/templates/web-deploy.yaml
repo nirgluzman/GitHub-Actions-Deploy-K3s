@@ -15,6 +15,12 @@ spec:
     metadata:
       labels:
         server: {{ .Values.webserver.name }}
+      annotations:
+        # trigger an update rollout by updating the object's `spec: template`
+        # https://stackoverflow.com/questions/46336852/helm-upgrade-doesnt-pull-new-container
+        # https://stackoverflow.com/questions/58561126/adding-time-stamp-to-kubernetes-deployment-with-latest-tag
+        # https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps
+        timestamp: "{{ now | unixEpoch }}"
     spec:
       containers:
         - name: {{ .Values.webserver.name }}
