@@ -259,3 +259,17 @@ helm search repo s3-repo --versions
 ```bash
 helm upgrade --install web-app-release s3-repo/web-app-cluster
 ```
+
+## Kubernetes - trigger an update rollout
+
+- <https://stackoverflow.com/questions/46336852/helm-upgrade-doesnt-pull-new-container>
+- <https://stackoverflow.com/questions/58561126/adding-time-stamp-to-kubernetes-deployment-with-latest-tag>
+- <https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps>
+
+- `pullPolicy: Always` - when the container is restarted, explicitly forces Kubernetes to pull the
+  image from container registry.
+- Any update to object's `spec: template` triggers an update rollout.
+
+## Kubernetes - Rollout Strategy
+
+- <https://yuminlee2.medium.com/kubernetes-rollout-strategy-e2268774251a>
