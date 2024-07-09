@@ -270,6 +270,10 @@ helm upgrade --install web-app-release s3-repo/web-app-cluster
   image from container registry.
 - Any update to object's `spec: template` triggers an update rollout.
 
+- Updating the Helm Chart version also re-creates the Pod.
+  <https://v3.helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments>
+  <https://codersociety.com/blog/articles/helm-best-practices>
+
 ## Kubernetes - Rollout Strategy
 
 - <https://yuminlee2.medium.com/kubernetes-rollout-strategy-e2268774251a>
